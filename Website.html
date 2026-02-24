@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simply Plural Test</title>
+</head>
+<body>
+    <div>
+        <h1 id="text01">Made by the Aether Collective</h1>
+        <p id="text02"><span class="p"><strong>Currently Fronting:</strong> Checking...</span></p>
+        <p id="text03"><span class="p"><strong>Last Front:</strong> Checking...</span></p>
+    </div>
+
+    <script src="sp-client.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            getCurrentFronters('text02');
+            getLastFrontedDateTime('text03', '1234567890abcdef123456ab'); 
+        });
+    </script>
+
+    <style>
+        rainbow {
+            color: transparent;
+            letter-spacing: 0.05em;
+            background: linear-gradient(45deg, #fd004c 16.7%, #fe9000 16.7%, #fe9000 33.4%, #fff020 33.4%, #fff020 50.1%, #3edf4b 50.1%, #3edf4b 66.8%, #6c8fff 66.8%, #6c8fff 83.5%, #d112d8 83.5%);
+            -webkit-text-stroke: 0.02em black;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: rainbow 50s linear infinite, pulse 0.8s infinite ease-in-out alternate;
+        }
+        @keyframes rainbow {
+            100% {
+                background-position: 400em -50em;
+            }
+        }
+        pulse {
+            animation: pulse 2s infinite ease-in-out alternate;
+        }
+        @keyframes pulse {
+            from { transform: scale(0.975); }
+            to   { transform: scale(1.025); }
+        }
+    </style>
+</body>
+</html>

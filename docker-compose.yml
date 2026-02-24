@@ -1,0 +1,10 @@
+services:
+  octocon-relay:
+    build: /mnt/cache/docker-compose/SimplePlural-Relay
+    container_name: SimplePlural-Relay
+    ports:
+      - "3001:3001"
+    environment:
+      SP_API_KEY: "YOUR_API_KEY_HERE"
+      SP_SYSTEM_ID: "YOUR_SYSTEM_ID_HERE"
+      SP_BUCKET: ""
