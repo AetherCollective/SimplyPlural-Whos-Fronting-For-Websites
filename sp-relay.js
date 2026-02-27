@@ -72,6 +72,14 @@ async function fetchFrontHistory(memberId) {
   } catch { return []; }
 }
 
+function sortHistoryNewest(history) {
+  return history.sort((a, b) => {
+    const tA = a?.content?.endTime || 0;
+    const tB = b?.content?.endTime || 0;
+    return tB - tA;
+  });
+}
+
 const server = http.createServer((req, res) => {
   if (req.url === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -105,9 +113,10 @@ wss.on('connection', async (ws, req) => {
       if (msg.type === 'get_fronthistory' && msg.memberId) {
         subscribedMembers.add(msg.memberId); 
         console.log(`Fetching history for member: ${msg.memberId}`);
-        const history = await fetchFrontHistory(msg.memberId);
+        let history = await fetchFrontHistory(msg.memberId);
         console.log(`History records returned: ${history.length}`);
-        send(ws, { type: 'fronthistory', memberId: msg.memberId, data: history.at(-1) });
+        history = sortHistoryNewest(history);
+        send(ws, { type: 'fronthistory', memberId: msg.memberId, data: history[0] || null });
       }
     } catch (e) { console.error('Message handler error:', e.message); }
   });
@@ -154,7 +163,8 @@ function connectUpstream() {
 
         broadcast({ type: 'fronters', data: fronters });
         for (const { client, memberId, history } of historyResults) {
-          send(client, { type: 'fronthistory', memberId, data: history });
+          const sorted = sortHistoryNewest(history);
+          send(client, { type: 'fronthistory', memberId, data: sorted[0] || null });
         }
       }
     } catch { /* ignore */ }
