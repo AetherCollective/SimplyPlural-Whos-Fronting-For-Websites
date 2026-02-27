@@ -21,6 +21,15 @@ const SYSTEM_ID = process.env.SP_SYSTEM_ID;
 const BUCKET    = process.env.SP_BUCKET || null;
 const PORT      = process.env.PORT || 3000;
 
+const server = http.createServer((req, res) => {
+  if (req.url === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ status: 'ok' }));
+  }
+  res.writeHead(404);
+  res.end();
+});
+
 if (!API_KEY || !SYSTEM_ID) {
   console.error('ERROR: SP_API_KEY and SP_SYSTEM_ID must be set in .env');
   process.exit(1);
@@ -165,7 +174,7 @@ function connectUpstream() {
 
 connectUpstream();
 
-server.listen(PORT, () => console.log(`Relay running on ws://localhost:${PORT}`));
+server.listen(PORT, () => console.log(`Relay running on port ${PORT}`));
 
 function shutdown() {
   console.log('Shutting down...');
