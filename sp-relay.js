@@ -151,7 +151,7 @@ function connectUpstream() {
     console.log('SP message:', str);
     try {
       const msg = JSON.parse(str);
-      if (msg.msg?.toLowerCase() === 'update') {
+      if (msg.msg?.toLowerCase() === 'update' || msg.target?.toLowerCase() === 'fronters') {
         const frontersPromise = fetchCurrentFronters();
 
         const historyPromises = [];
