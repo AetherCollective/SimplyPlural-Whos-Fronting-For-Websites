@@ -2,9 +2,9 @@
   "name": "sp-relay",
   "version": "1.0.0",
   "description": "Simply Plural Relay Server",
-  "main": "relay.js",
+  "main": "sp-relay.js",
   "scripts": {
-    "start": "node relay.js"
+    "start": "node sp-relay.js"
   },
   "dependencies": {
     "ws": "^8.16.0",
