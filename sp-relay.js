@@ -107,7 +107,7 @@ wss.on('connection', async (ws, req) => {
         console.log(`Fetching history for member: ${msg.memberId}`);
         const history = await fetchFrontHistory(msg.memberId);
         console.log(`History records returned: ${history.length}`);
-        send(ws, { type: 'fronthistory', memberId: msg.memberId, data: history[-1] });
+        send(ws, { type: 'fronthistory', memberId: msg.memberId, data: history.at(-1) });
       }
     } catch (e) { console.error('Message handler error:', e.message); }
   });
