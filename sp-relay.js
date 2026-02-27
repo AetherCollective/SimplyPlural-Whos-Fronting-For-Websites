@@ -121,7 +121,7 @@ wss.on('connection', async (ws, req) => {
           return;
         }
         history = sortHistoryNewest(history);
-        send(ws, { type: 'fronthistory', memberId: msg.memberId, data: [history[0] || null] });
+        send(ws, { type: 'fronthistory', memberId: msg.memberId, data: history[0] ? [history[0]] : [] });
       }
     } catch (e) { console.error('Message handler error:', e.message); }
   });
@@ -151,7 +151,7 @@ function connectUpstream() {
     console.log('SP message:', str);
     try {
       const msg = JSON.parse(str);
-      if (msg.msg?.toLowerCase() === 'update' && msg.target?.toLowerCase() === 'fronthistory') {
+      if (msg.msg?.toLowerCase() === 'update') {
         const frontersPromise = fetchCurrentFronters();
 
         const historyPromises = [];
@@ -174,7 +174,7 @@ function connectUpstream() {
             continue;
           }
           const sorted = sortHistoryNewest(history);
-          send(client, { type: 'fronthistory', memberId, data: [sorted[0] || null] });
+          send(client, { type: 'fronthistory', memberId, data: sorted[0] ? [sorted[0]] : [] });
         }
       }
     } catch { /* ignore */ }
