@@ -21,15 +21,6 @@ const SYSTEM_ID = process.env.SP_SYSTEM_ID;
 const BUCKET    = process.env.SP_BUCKET || null;
 const PORT      = process.env.PORT || 3000;
 
-const server = http.createServer((req, res) => {
-  if (req.url === '/health') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    return res.end(JSON.stringify({ status: 'ok' }));
-  }
-  res.writeHead(404);
-  res.end();
-});
-
 if (!API_KEY || !SYSTEM_ID) {
   console.error('ERROR: SP_API_KEY and SP_SYSTEM_ID must be set in .env');
   process.exit(1);
@@ -81,10 +72,15 @@ async function fetchFrontHistory(memberId) {
   } catch { return []; }
 }
 
-const server = http.createServer((req) => {
-  console.log(`HTTP request: ${req.method} ${req.url}`);
+const server = http.createServer((req, res) => {
+  if (req.url === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ status: 'ok' }));
+  }
+  res.writeHead(404);
+  res.end();
 });
-const wss    = new WebSocket.Server({ server, path: '/api/socket/websocket' });
+const wss = new WebSocket.Server({ server, path: '/api/socket/websocket' });
 
 function send(ws, msg) {
   if (ws.readyState === WebSocket.OPEN)
